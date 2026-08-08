@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: clean_amazon_products
+    description: "Cleaned, deduplicated product data. One row per unique product_id."
+    columns:
+      - name: product_id
+        description: "Unique identifier for each product."
+        tests:
+          - unique
+          - not_null
+      - name: discounted_price
+        tests:
+          - not_null
+      - name: actual_price
+        tests:
+          - not_null
+
+  - name: stg_amazon_reviews
+    description: "One row per individual review, exploded from packed review arrays in the raw source."
+    columns:
+      - name: product_id
+        description: "Foreign key back to stg_amazon_products."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_amazon_products')
+              field: product_id
+      - name: review_index
+        tests:
+          - not_null
