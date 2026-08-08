@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: AMAZON_ANALYTICS
+    schema: RAW
+    tables:
+      - name: raw_amazon_products
+        description: "Raw Amazon product data, loaded from amazon.csv. All columns VARCHAR, one row per product per load."
