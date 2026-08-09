@@ -15,6 +15,7 @@ deduped as (
 split_arrays as (
     select
         product_id,
+        review_content as review_content_raw,
         split(user_id, ',') as user_id_arr,
         split(user_name, ',') as user_name_arr,
         split(review_id, ',') as review_id_arr,
@@ -51,6 +52,7 @@ with_flags as (
 exploded as (
     select
         w.product_id,
+        w.review_content_raw,
         w.is_malformed_review_array,
         w.review_content_may_be_misaligned,
         idx.value::int as review_index,
