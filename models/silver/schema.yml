@@ -24,7 +24,7 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_amazon_products')
+              to: ref('clean_amazon_products')
               field: product_id
       - name: review_index
         tests:

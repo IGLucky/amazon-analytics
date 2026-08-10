@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: "Product dimension. One row per product, with derived business attributes: price_tier, discount_band, rating_band."
+    columns:
+      - name: product_id
+        description: "Primary key. Unique identifier for each product."
+        tests:
+          - unique
+          - not_null
+      - name: category
+        tests:
+          - not_null
+      - name: price_tier
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Budget', 'Mid-range', 'Premium', 'High-end']
+      - name: discount_band
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Heavy (60%+)', 'Moderate (30-59%)', 'Light (1-29%)', 'None']
+
+  - name: fct_product_reviews
+    description: "Review fact table. One row per review, joined to product context for BI consumption."
+    columns:
+      - name: product_id
+        description: "Foreign key to dim_products."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+
+  - name: agg_category_performance
+    description: "Category-level KPI rollup. One row per category."
+    columns:
+      - name: category
+        description: "Primary key at category grain."
+        tests:
+          - unique
+          - not_null
+      - name: product_count
+        tests:
+          - not_null
